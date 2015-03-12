@@ -1,2 +1,7 @@
 h2= @question.title
 p= @question.body
+
+h4 Answers
+= render partial: 'answers/answer', collection: @question.answers, as: :answer
+
+= render 'answers/form'

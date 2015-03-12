@@ -1,10 +1,12 @@
 class QuestionsController < ApplicationController
+  before_action :find_question, only: [:show, :edit, :update, :destroy]
+
   def index
     @questions = Question.all
   end
 
   def show
-    find_question
+    @answer = Answer.new
   end
 
   def new
@@ -12,7 +14,6 @@ class QuestionsController < ApplicationController
   end
 
   def edit
-    find_question
   end
 
   def create
@@ -26,7 +27,6 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    find_question
 
     if @question.update(question_params)
       redirect_to @question, notice: 'Question was successfully updated'
@@ -36,7 +36,6 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    find_question
     @question.destroy
     redirect_to questions_path, notice: 'Question was deleted'
   end
