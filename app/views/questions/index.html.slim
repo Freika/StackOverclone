@@ -1,0 +1,6 @@
+h1 Questions
+
+= link_to 'Ask new question', new_question_path, class: 'btn btn-default'
+
+- @questions.each do |question|
+  p= link_to question.title, question

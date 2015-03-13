@@ -11,6 +11,7 @@ gem 'jbuilder', '~> 2.0'
 
 gem 'slim-rails'
 gem 'simple_form'
+gem 'bootstrap-sass'
 
 group :development, :test do
   gem 'byebug'
