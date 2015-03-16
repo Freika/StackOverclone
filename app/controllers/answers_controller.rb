@@ -1,8 +1,10 @@
 class AnswersController < ApplicationController
+  before_action :authenticate_user!
 
   def create
     @question = Question.find(params[:question_id])
     @answer = @question.answers.build(answer_params)
+    @answer.user_id = current_user.id
 
     if @answer.save
       flash[:notice] = 'Answer was added'
