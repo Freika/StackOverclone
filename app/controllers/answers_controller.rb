@@ -4,7 +4,7 @@ class AnswersController < ApplicationController
   def create
     @question = Question.find(params[:question_id])
     @answer = @question.answers.build(answer_params)
-    @answer.user_id = current_user.id
+    @answer.user = current_user
 
     if @answer.save
       flash[:notice] = 'Answer was added'

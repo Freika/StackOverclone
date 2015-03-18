@@ -20,9 +20,8 @@ feature 'Question' do
 
   scenario 'Unauthenticated user cannot create question' do
     visit questions_path
-    click_on 'Ask new question'
 
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).to_not have_link 'Ask question'
   end
 
   scenario 'Authenticated user can leave an answer to question' do
