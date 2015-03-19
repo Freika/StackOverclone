@@ -12,6 +12,16 @@ describe AnswersController do
         expect { post :create, question_id: question, answer: attributes_for(:answer) }.to change(Answer, :count).by 1
       end
 
+      it 'correctly assigns to user' do
+        post :create, question_id: question, answer: attributes_for(:answer)
+        expect(Answer.last.user).to eq @user
+      end
+
+      it 'correctly assigns to question' do
+        post :create, question_id: question, answer: attributes_for(:answer)
+        expect(Answer.last.question).to eq question
+      end
+
       it 'redirects to parent question view' do
         post :create, question_id: question, answer: attributes_for(:answer)
         expect(response).to redirect_to question
