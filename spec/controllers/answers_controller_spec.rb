@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe AnswersController do
-  let(:answer) { create(:answer) }
   let(:question) { create(:question) }
+  let(:answer) { create(:answer, question_id: question) }
 
   describe 'POST #create' do
     sign_in_user
@@ -36,8 +36,11 @@ describe AnswersController do
   end
 
   describe 'DELETE #destroy' do
-    pending 'correctly deletes answer' do
-      expect { delete :destroy, id: answer, question_id: question }.to change(Answer, :count).by(-1)
+    sign_in_user
+
+    it 'correctly deletes answer' do
+      answer = create(:answer, question_id: question)
+      expect { delete :destroy, id: answer, question_id: question }.to change(Answer, :count).by -1
     end
   end
 
