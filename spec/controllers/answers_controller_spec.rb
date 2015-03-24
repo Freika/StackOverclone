@@ -52,9 +52,9 @@ describe AnswersController do
     end
 
     context 'answer author' do
+      let(:answer) { create(:answer, user_id: @user.id) }
+
       it 'correctly deletes answer' do
-        answer.update(user_id: @user.id)
-        p answer
         expect { delete :destroy, id: answer, question_id: question }.to change(Answer, :count).by -1
       end
     end
