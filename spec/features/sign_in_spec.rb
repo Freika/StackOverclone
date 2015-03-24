@@ -37,4 +37,17 @@ feature 'User sign in' do
 
     expect(page).to have_content 'Welcome! You have signed up successfully.'
   end
+
+  scenario 'User authenticated after registration' do
+    visit new_user_registration_path
+
+    fill_in 'Email', with: 'some@user.com'
+    fill_in 'Password', with: '00000000'
+    fill_in 'Password confirmation', with: '00000000'
+    click_on 'Sign up'
+
+    visit new_user_session_path
+
+    expect(current_path).to eq root_path
+  end
 end

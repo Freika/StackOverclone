@@ -17,8 +17,13 @@ class AnswersController < ApplicationController
 
   def destroy
     @question = Question.find(params[:question_id])
-    @answer.destroy
-    redirect_to @question, notice: 'Answer was successfully deleted'
+    @answer = Answer.find(params[:id])
+    if current_user.id == @answer.user_id
+      @answer.destroy
+      redirect_to @question, notice: 'Answer was successfully deleted'
+    else
+      redirect_to @question, notice: 'You can delete only questions you own'
+    end
   end
 
   private

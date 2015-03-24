@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe QuestionsController do
-  let(:question) { create(:question) }
+  let(:question) { create(:question, user: @user) }
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 2) }
@@ -124,16 +124,31 @@ describe QuestionsController do
 
   describe 'DELETE #destroy' do
     sign_in_user
+    let(:another_question) { create(:question) }
+    before { question; another_question }
 
-    before { question }
+    context 'question author' do
 
-    it 'deletes question' do
-      expect { delete :destroy, id: question }.to change(Question, :count).by -1
+      it 'deletes question' do
+        expect { delete :destroy, id: question }.to change(Question, :count).by -1
+      end
+
+      it 'redirect to index template' do
+        delete :destroy, id: question
+        expect(response).to redirect_to questions_path
+      end
     end
 
-    it 'redirect to index template' do
-      delete :destroy, id: question
-      expect(response).to redirect_to questions_path
+    context 'other user' do
+      it 'does not change questions count' do
+        expect { delete :destroy, id: another_question }.to_not change(Question, :count)
+      end
+
+      it 'redirected to root' do
+        delete :destroy, id: another_question
+        expect(response).to redirect_to root_path
+        expect(flash[:notice]).to_not eq 'Question was successfully deleted'
+      end
     end
   end
 end

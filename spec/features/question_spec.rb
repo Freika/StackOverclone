@@ -16,6 +16,8 @@ feature 'Question' do
     click_on 'Create Question'
 
     expect(page).to have_content 'Question was successfully created'
+    expect(page).to have_content 'What the hell is wrong with me?'
+    expect(page).to have_content 'Radioactive spider bites me yesterday in the lab, what should I do with this sh*t?'
   end
 
   scenario 'Unauthenticated user cannot create question' do
