@@ -1,9 +1,9 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_question
   before_action :set_answer, only: :destroy
 
   def create
-    @question = Question.find(params[:question_id])
     @answer = @question.answers.build(answer_params)
     @answer.user = current_user
 
@@ -16,7 +16,6 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    @question = Question.find(params[:question_id])
     @answer = Answer.find(params[:id])
     if current_user.id == @answer.user_id
       @answer.destroy
@@ -34,6 +33,10 @@ class AnswersController < ApplicationController
 
   def set_answer
     @answer = Answer.find(params[:id])
+  end
+
+  def set_question
+    @question = Question.find(params[:question_id])
   end
 
 end

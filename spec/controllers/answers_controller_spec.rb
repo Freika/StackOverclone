@@ -1,8 +1,8 @@
 require 'rails_helper'
 
 describe AnswersController do
-  let(:question) { create(:question) }
-  let(:answer) { create(:answer, question_id: question) }
+  let!(:question) { create(:question) }
+  let!(:answer) { create(:answer, question: question, user_id: @user) }
 
   describe 'POST #create' do
     context 'with valid attributes' do
@@ -44,18 +44,12 @@ describe AnswersController do
 
   describe 'DELETE #destroy' do
     sign_in_user
-    let(:another_answer) { create(:answer) }
-
-    before do
-      answer
-      another_answer
-    end
+    let!(:another_answer) { create(:answer, question: question) }
 
     context 'answer author' do
-      let(:answer) { create(:answer, user_id: @user.id) }
-
       it 'correctly deletes answer' do
-        expect { delete :destroy, id: answer, question_id: question }.to change(Answer, :count).by -1
+        answer.update(user: @user)
+        expect { delete :destroy, id: answer, question_id: question }.to change(Answer, :count).by(-1)
       end
     end
 

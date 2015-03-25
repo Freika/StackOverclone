@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :find_question, only: [:show, :edit, :update]
+  before_action :find_question, only: [:show, :edit, :update, :destroy]
 
   def index
     @questions = Question.all
@@ -37,7 +37,6 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    @question = Question.find(params[:id])
     if current_user.id == @question.user_id
       @question.destroy
       redirect_to questions_path, notice: 'Question was deleted'

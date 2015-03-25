@@ -38,19 +38,24 @@ feature 'Question' do
   end
 
   scenario 'User can view questions list' do
-    5.times { |n| Question.create(title: "Question number #{n}", body: 'Lorem ipsum dolor.', user: user1) }
+    questions = create_list(:question, 5, user: user1)
     visit questions_path
 
-    expect(page).to have_selector('p.question', count: 5)
+    questions.each do |question|
+      expect(page).to have_link question.title
+    end
+
   end
 
   scenario 'User or guest can see question and appropriate answers' do
-    answer = create(:answer, question: question, user: user1)
+    answers = create_list(:answer, 3, question: question, user: user1)
     visit question_path(question)
 
     expect(page).to have_content question.title
     expect(page).to have_content question.body
-    expect(page).to have_content answer.body
+    answers.each do |answer|
+      expect(page).to have_content answer.body
+    end
   end
 
   scenario 'Unauthenticated user cannot leave answers' do

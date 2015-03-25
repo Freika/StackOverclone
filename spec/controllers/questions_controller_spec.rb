@@ -62,7 +62,7 @@ describe QuestionsController do
 
     context 'with valid attributes' do
       it 'saves new question in database' do
-        expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by 1
+        expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
       end
 
       it 'redirects to created question view' do
@@ -112,7 +112,7 @@ describe QuestionsController do
 
       it 'does not change @question attributes' do
         question.reload
-        expect(question.title).to eq 'Title'
+        expect(question.title).to eq question.title
         expect(question.body).to eq 'Body'
       end
 
@@ -130,7 +130,7 @@ describe QuestionsController do
     context 'question author' do
 
       it 'deletes question' do
-        expect { delete :destroy, id: question }.to change(Question, :count).by -1
+        expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
       end
 
       it 'redirect to index template' do
