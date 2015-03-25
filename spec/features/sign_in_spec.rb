@@ -6,7 +6,6 @@ feature 'User sign in' do
 
   scenario 'Registered user tries to sign in' do
     sign_in_with(user.email, user.password)
-
     expect(current_path).to eq root_path
   end
 
@@ -15,16 +14,6 @@ feature 'User sign in' do
 
     expect(page).to have_content 'Invalid email or password'
     expect(current_path).to eq new_user_session_path
-  end
-
-  scenario 'and sign out' do
-    sign_in_with(user.email, user.password)
-    visit root_path
-
-    click_on 'Logout'
-
-    expect(page).to have_content 'Login'
-    expect(page).to have_content 'Register'
   end
 
   scenario 'User registration' do

@@ -9,12 +9,7 @@ describe AnswersController do
       sign_in_user
 
       it 'saves new answers in database' do
-        expect { post :create, question_id: question, answer: attributes_for(:answer) }.to change(Answer, :count).by 1
-      end
-
-      it 'correctly assigns to user' do
-        post :create, question_id: question, answer: attributes_for(:answer)
-        expect(Answer.last.user).to eq @user
+        expect { post :create, question_id: question, user_id: @user, answer: attributes_for(:answer) }.to change(@user.answers, :count).by 1
       end
 
       it 'correctly assigns to question' do
