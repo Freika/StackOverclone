@@ -9,7 +9,7 @@ describe AnswersController do
       sign_in_user
 
       it 'saves new answers in database' do
-        expect { post :create, question_id: question, user_id: @user, answer: attributes_for(:answer) }.to change(@user.answers, :count).by 1
+        expect { post :create, question_id: question, user_id: @user, answer: attributes_for(:answer) }.to change(@user.answers, :count).by(1)
       end
 
       it 'correctly assigns to question' do
@@ -43,7 +43,7 @@ describe AnswersController do
 
     context 'answer author' do
       it 'correctly deletes answer' do
-        answer.update(user: @user)
+        answer.update!(user: @user)
         expect { delete :destroy, id: answer, question_id: question }.to change(Answer, :count).by(-1)
       end
     end
