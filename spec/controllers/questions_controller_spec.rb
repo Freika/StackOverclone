@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe QuestionsController do
-  let(:question) { create(:question) }
+  let(:question) { create(:question, user: @user) }
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 2) }
@@ -30,6 +30,8 @@ describe QuestionsController do
   end
 
   describe 'GET #new' do
+    sign_in_user
+
     before { get :new }
 
     it 'assigns new Question object to @question' do
@@ -42,6 +44,8 @@ describe QuestionsController do
   end
 
   describe 'GET #edit' do
+    sign_in_user
+
     before { get :edit, id: question }
 
     it 'assigns requested question to @question' do
@@ -54,9 +58,11 @@ describe QuestionsController do
   end
 
   describe 'POST #create' do
+    sign_in_user
+
     context 'with valid attributes' do
       it 'saves new question in database' do
-        expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by 1
+        expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
       end
 
       it 'redirects to created question view' do
@@ -66,7 +72,7 @@ describe QuestionsController do
     end
 
     context 'with invalid attributes' do
-      it 'doesn\'t save new question' do
+      it "doesn't save new question" do
         expect { post :create, question: attributes_for(:invalid_question) }.to_not change(Question, :count)
       end
 
@@ -78,6 +84,8 @@ describe QuestionsController do
   end
 
   describe 'PATCH #update' do
+    sign_in_user
+
     context 'valid attributes' do
       it 'assigns requested question record to @question' do
         patch :update, id: question, question: attributes_for(:question)
@@ -104,7 +112,7 @@ describe QuestionsController do
 
       it 'does not change @question attributes' do
         question.reload
-        expect(question.title).to eq 'Title'
+        expect(question.title).to eq question.title
         expect(question.body).to eq 'Body'
       end
 
@@ -115,15 +123,32 @@ describe QuestionsController do
   end
 
   describe 'DELETE #destroy' do
-    before { question }
+    sign_in_user
+    let(:another_question) { create(:question) }
+    before { question; another_question }
 
-    it 'deletes question' do
-      expect { delete :destroy, id: question }.to change(Question, :count).by -1
+    context 'question author' do
+
+      it 'deletes question' do
+        expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
+      end
+
+      it 'redirect to index template' do
+        delete :destroy, id: question
+        expect(response).to redirect_to questions_path
+      end
     end
 
-    it 'redirect to index template' do
-      delete :destroy, id: question
-      expect(response).to redirect_to questions_path
+    context 'other user' do
+      it 'does not change questions count' do
+        expect { delete :destroy, id: another_question }.to_not change(Question, :count)
+      end
+
+      it 'redirected to root' do
+        delete :destroy, id: another_question
+        expect(response).to redirect_to root_path
+        expect(flash[:notice]).to_not eq 'Question was successfully deleted'
+      end
     end
   end
 end

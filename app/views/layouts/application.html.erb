@@ -11,6 +11,10 @@
 <%= render 'shared/nav' %>
 
 <div class="container">
+  <%= render 'shared/flash_messages', flash: flash %>
+</div>
+
+<div class='container'>
   <%= yield %>
 </div>
 

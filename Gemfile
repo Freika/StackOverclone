@@ -13,6 +13,8 @@ gem 'slim-rails'
 gem 'simple_form'
 gem 'bootstrap-sass'
 
+gem 'devise'
+
 group :development, :test do
   gem 'byebug'
   gem 'web-console', '~> 2.0'
@@ -20,6 +22,10 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'factory_girl_rspec'
   gem 'guard-rspec', require: false
+  gem 'capybara'
+  gem 'database_cleaner'
+  gem 'launchy'
+  gem 'pry-rails'
 end
 
 group :test do
