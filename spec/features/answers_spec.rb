@@ -6,7 +6,7 @@ feature 'Interacting with answers' do
   given(:another_user) { create(:user) }
   given(:question) { create(:question, user: another_user) }
 
-  scenario 'Authenticated user can leave an answer to question' do
+  scenario 'Authenticated user can leave an answer to question', js: true do
     sign_in_with(user.email, user.password)
     visit question_path(question)
 

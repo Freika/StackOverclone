@@ -12,7 +12,7 @@ class AnswersController < ApplicationController
     else
       flash[:notice] = 'Something goes wrong'
     end
-    redirect_to @question
+    # redirect_to @question
   end
 
   def destroy

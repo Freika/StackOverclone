@@ -26,6 +26,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'launchy'
   gem 'pry-rails'
+  gem 'capybara-webkit'
 end
 
 group :test do
