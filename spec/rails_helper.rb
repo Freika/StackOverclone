@@ -17,25 +17,13 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
   config.infer_spec_type_from_file_location!
 
-  config.before(:all) do
-    FactoryGirl.reload
-  end
+  config.before(:all) { FactoryGirl.reload }
 
-  config.before(:suite) do
-    DatabaseCleaner.clean_with(:truncation)
-  end
+  config.before(:suite) { DatabaseCleaner.clean_with :truncation }
+  config.before(:each) { DatabaseCleaner.strategy = :transaction }
+  config.before(:each, js: true) { DatabaseCleaner.strategy = :truncation }
+  config.before(:each) { DatabaseCleaner.start }
+  config.after(:each) { DatabaseCleaner.clean }
 
-  config.before(:each) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.start
-  end
-
-  config.before(:each, js: true) do
-    DatabaseCleaner.strategy = :truncation
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean
-  end
 
 end

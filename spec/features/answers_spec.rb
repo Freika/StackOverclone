@@ -14,7 +14,6 @@ feature 'Interacting with answers' do
     click_on 'Add answer'
 
     expect(current_path).to eq question_path(question)
-    expect(page).to have_content 'Answer was added'
     within '.answers' do
       expect(page).to have_content 'That means you gonna be Spiderman!'
     end
