@@ -13,8 +13,11 @@ feature 'Interacting with answers' do
     fill_in 'Your answer', with: 'That means you gonna be Spiderman!'
     click_on 'Add answer'
 
+    expect(current_path).to eq question_path(question)
     expect(page).to have_content 'Answer was added'
-    expect(page).to have_content 'That means you gonna be Spiderman!'
+    within '.answers' do
+      expect(page).to have_content 'That means you gonna be Spiderman!'
+    end
   end
 
   scenario 'User or guest can see question and appropriate answers' do
