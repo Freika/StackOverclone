@@ -7,30 +7,23 @@ require 'shoulda/matchers'
 Dir[Rails.root.join('spec/support/**/*.rb')].each {|f| require f}
 
 ActiveRecord::Migration.maintain_test_schema!
+Capybara.javascript_driver = :webkit
 
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include Devise::TestHelpers, type: :controller
-  config.use_transactional_fixtures = true
+  config.include UsersHelpers,        type: :feature
+  config.extend ControllerHelpers,    type: :controller
+  config.use_transactional_fixtures = false
   config.infer_spec_type_from_file_location!
-  config.extend ControllerHelpers, type: :controller
-  config.include UsersHelpers, type: :feature
 
-  config.before(:all) do
-    FactoryGirl.reload
-  end
+  config.before(:all) { FactoryGirl.reload }
 
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
-  end
+  config.before(:suite) { DatabaseCleaner.clean_with :truncation }
+  config.before(:each) { DatabaseCleaner.strategy = :transaction }
+  config.before(:each, js: true) { DatabaseCleaner.strategy = :truncation }
+  config.before(:each) { DatabaseCleaner.start }
+  config.after(:each) { DatabaseCleaner.clean }
 
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
-
-  config.after(:each) do
-    DatabaseCleaner.clean
-  end
 
 end

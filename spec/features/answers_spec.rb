@@ -6,15 +6,17 @@ feature 'Interacting with answers' do
   given(:another_user) { create(:user) }
   given(:question) { create(:question, user: another_user) }
 
-  scenario 'Authenticated user can leave an answer to question' do
+  scenario 'Authenticated user can leave an answer to question', js: true do
     sign_in_with(user.email, user.password)
     visit question_path(question)
 
     fill_in 'Your answer', with: 'That means you gonna be Spiderman!'
     click_on 'Add answer'
 
-    expect(page).to have_content 'Answer was added'
-    expect(page).to have_content 'That means you gonna be Spiderman!'
+    expect(current_path).to eq question_path(question)
+    within '.answers' do
+      expect(page).to have_content 'That means you gonna be Spiderman!'
+    end
   end
 
   scenario 'User or guest can see question and appropriate answers' do

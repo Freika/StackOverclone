@@ -5,8 +5,7 @@ h2= @question.title
 h4= "Author: #{@question.user.email}"
 p= @question.body
 
-h4 Answers
-= render partial: 'answers/answer', collection: @question.answers, as: :answer
+= render 'answers/answers'
 
 - if current_user
   = render 'answers/form'

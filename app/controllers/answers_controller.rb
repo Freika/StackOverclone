@@ -6,13 +6,7 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.build(answer_params)
     @answer.user = current_user
-
-    if @answer.save
-      flash[:notice] = 'Answer was added'
-    else
-      flash[:notice] = 'Something goes wrong'
-    end
-    redirect_to @question
+    @answer.save
   end
 
   def destroy

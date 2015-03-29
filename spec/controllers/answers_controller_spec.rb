@@ -9,30 +9,30 @@ describe AnswersController do
       sign_in_user
 
       it 'saves new answers in database' do
-        expect { post :create, question_id: question, user_id: @user, answer: attributes_for(:answer) }.to change(@user.answers, :count).by(1)
+        expect { post :create, question_id: question, user_id: @user, answer: attributes_for(:answer), format: :js }.to change(@user.answers, :count).by(1)
       end
 
       it 'correctly assigns to question' do
-        post :create, question_id: question, answer: attributes_for(:answer)
+        post :create, question_id: question, answer: attributes_for(:answer), format: :js
         expect(Answer.last.question).to eq question
       end
 
-      it 'redirects to parent question view' do
-        post :create, question_id: question, answer: attributes_for(:answer)
-        expect(response).to redirect_to question
+      it 'redirects to stay in current question page' do
+        post :create, question_id: question, answer: attributes_for(:answer), format: :js
+        expect(response).to render_template :create
       end
     end
 
     context 'unauthenticated user' do
       it 'redirected to sign in page' do
-        post :create, question_id: question, answer: attributes_for(:answer)
-        expect(response).to redirect_to new_user_session_path
+        post :create, question_id: question, answer: attributes_for(:answer), format: :js
+        expect(response.status).to eq 401
       end
     end
 
     context 'with invalid attributes' do
       it "doesn't save new answer" do
-        expect { post :create, question_id: question, answer: attributes_for(:invalid_answer) }.to_not change(Answer, :count)
+        expect { post :create, question_id: question, answer: attributes_for(:invalid_answer), format: :js }.to_not change(Answer, :count)
       end
     end
   end
