@@ -19,6 +19,15 @@ feature 'Interacting with answers' do
     end
   end
 
+  scenario 'User tries to create empty answer', js: true do
+    sign_in_with(user.email, user.password)
+    visit question_path(question)
+
+    click_on 'Add answer'
+
+    expect(page).to have_content "Body can't be blank"
+  end
+
   scenario 'User or guest can see question and appropriate answers' do
     answers = create_list(:answer, 3, question: question, user: another_user)
     visit question_path(question)
