@@ -60,4 +60,30 @@ describe AnswersController do
     end
   end
 
+  describe 'PATCH #update' do
+    sign_in_user
+
+    it 'assigns requested answer record to @answer' do
+      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+      expect(assigns(:answer)).to eq answer
+    end
+
+    it 'updates @answer attributes' do
+      patch :update, id: answer, question_id: question, answer: { body: 'Shiny body' }, format: :js
+      answer.reload
+      expect(answer.body).to eq 'Shiny body'
+    end
+
+    it 'render updated answer' do
+      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+      expect(response).to render_template :update
+    end
+
+    it 'assigns the question' do
+      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+      expect(assigns(:question)).to eq question
+    end
+
+  end
+
 end
