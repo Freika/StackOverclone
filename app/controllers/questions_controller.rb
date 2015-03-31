@@ -15,6 +15,7 @@ class QuestionsController < ApplicationController
   end
 
   def edit
+    redirect_to root_path, notice: "Access denied" unless current_user.id == @question.user_id
   end
 
   def create
@@ -29,7 +30,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update(question_params)
+    if current_user.id == @question.user_id && @question.update(question_params)
       redirect_to @question, notice: 'Question was successfully updated'
     else
       render :edit
