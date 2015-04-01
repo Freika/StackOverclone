@@ -65,7 +65,6 @@ feature 'Interacting with answers' do
         expect(page).to_not have_content answer.body
         expect(page).to_not have_selector 'textarea'
       end
-
     end
 
     scenario 'Unauthenticated user tries to edit answer' do
@@ -75,7 +74,12 @@ feature 'Interacting with answers' do
     end
 
     scenario "Authenticated user tries to edit other's user answer" do
+      sign_in_with(user.email, user.password)
+      visit question_path(question)
 
+      within '.answers' do
+        expect(page).to_not have_link 'Edit'
+      end
     end
   end
 end
