@@ -82,4 +82,28 @@ feature 'Interacting with answers' do
       end
     end
   end
+
+  context 'Answer deleting' do
+    given!(:answer) { create(:answer, user: another_user, question: question, body: 'Brilliant answer') }
+
+    scenario "Answer's author can delete his answer", js: true do
+      sign_in_with(another_user.email, another_user.password)
+      visit question_path(question)
+
+      within "#answer_#{answer.id}" do
+        expect(page).to have_link 'Delete'
+        click_on 'Delete'
+      end
+
+      expect(page).to_not have_content answer.body
+    end
+
+    scenario "User can't see link to another user's answer deletion" do
+      visit question_path(question)
+      within "#answer_#{answer.id}" do
+        expect(page).to_not have_link 'Delete'
+      end
+    end
+
+  end
 end

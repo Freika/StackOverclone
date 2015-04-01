@@ -44,18 +44,18 @@ describe AnswersController do
     context 'answer author' do
       it 'correctly deletes answer' do
         answer.update!(user: @user)
-        expect { delete :destroy, id: answer, question_id: question }.to change(Answer, :count).by(-1)
+        expect { delete :destroy, id: answer, question_id: question, format: :js }.to change(Answer, :count).by(-1)
       end
     end
 
     context 'other user' do
       it 'does not change answers count' do
-        expect { delete :destroy, id: another_answer, question_id: question }.to_not change(Answer, :count)
+        expect { delete :destroy, id: another_answer, question_id: question, format: :js }.to_not change(Answer, :count)
       end
 
-      it 'redirects to question' do
-        delete :destroy, id: another_answer, question_id: question
-        expect(response).to redirect_to question
+      it 'renders destroy template' do
+        delete :destroy, id: another_answer, question_id: question, format: :js
+        expect(response).to render_template :destroy
       end
     end
   end

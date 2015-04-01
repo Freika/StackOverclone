@@ -13,9 +13,6 @@ class AnswersController < ApplicationController
     @answer = Answer.find(params[:id])
     if current_user.id == @answer.user_id
       @answer.destroy
-      redirect_to @question, notice: 'Answer was successfully deleted'
-    else
-      redirect_to @question, notice: 'You can delete only questions you own'
     end
   end
 
