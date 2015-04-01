@@ -61,28 +61,46 @@ describe AnswersController do
   end
 
   describe 'PATCH #update' do
-    sign_in_user
 
-    it 'assigns requested answer record to @answer' do
-      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
-      expect(assigns(:answer)).to eq answer
+    context 'when tries to update own answer' do
+      sign_in_user
+
+      it 'assigns requested answer record to @answer' do
+        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+        expect(assigns(:answer)).to eq answer
+      end
+
+      it 'updates @answer attributes' do
+        answer.update!(user: @user)
+        patch :update, id: answer, question_id: question, answer: { body: 'Shiny body' }, format: :js
+        answer.reload
+        expect(answer.body).to eq 'Shiny body'
+      end
+
+      it 'render updated answer' do
+        answer.update!(user: @user)
+        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+        expect(response).to render_template :update
+      end
+
+      it 'assigns the question' do
+        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+        expect(assigns(:question)).to eq question
+      end
     end
 
-    it 'updates @answer attributes' do
-      patch :update, id: answer, question_id: question, answer: { body: 'Shiny body' }, format: :js
-      answer.reload
-      expect(answer.body).to eq 'Shiny body'
+    context "when tries to update other's user answer" do
+      sign_in_user
+
+      let(:another_user) { create(:user) }
+      let(:another_answer) { create(:answer, question: question, user_id: another_user) }
+
+      it 'redirects to root' do
+        patch :update, id: another_answer, question_id: question, answer: attributes_for(:answer), format: :js
+        expect(response).to redirect_to question
+      end
     end
 
-    it 'render updated answer' do
-      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
-      expect(response).to render_template :update
-    end
-
-    it 'assigns the question' do
-      patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
-      expect(assigns(:question)).to eq question
-    end
 
   end
 

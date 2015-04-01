@@ -22,7 +22,11 @@ class AnswersController < ApplicationController
   def update
     @answer = Answer.find(params[:id])
     @question = @answer.question
-    @answer.update(answer_params)
+    if current_user.id == @answer.user_id
+      @answer.update(answer_params)
+    else
+      redirect_to @question, notice: 'Access denied'
+    end
   end
 
   private
