@@ -157,11 +157,11 @@ describe QuestionsController do
     context 'question author' do
 
       it 'deletes question' do
-        expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
+        expect { delete :destroy, id: question, format: :js }.to change(Question, :count).by(-1)
       end
 
       it 'redirect to index template' do
-        delete :destroy, id: question
+        delete :destroy, id: question, format: :js
         expect(response).to redirect_to questions_path
       end
     end

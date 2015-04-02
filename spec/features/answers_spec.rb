@@ -104,6 +104,20 @@ feature 'Interacting with answers' do
         expect(page).to_not have_link 'Delete'
       end
     end
+  end
+
+  scenario "question's author can mark answer as best", js: true do
+    first_answer  = create(:answer, question: question, user: another_user)
+    second_answer = create(:answer, question: question, user: another_user)
+
+    sign_in_with(another_user.email, another_user.password)
+    visit question_path(question)
+
+    within first('.answer') do
+      click_on 'Best'
+    end
+
+    expect(page).to have_selector('.best-answer')
 
   end
 end
