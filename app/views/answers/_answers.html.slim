@@ -1,6 +1,6 @@
 .answers
   h4 Answers
-  - @question.answers.each do |answer|
+  - @answers.each do |answer|
     - if answer.persisted?
       div.answer id=dom_id(answer) class=('solution' if answer.is_solution?)
         p= nice_datetime(answer.created_at)
