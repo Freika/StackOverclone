@@ -8,7 +8,6 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
-    @answers = @question.answers.order(is_solution: :desc)
   end
 
   def new
