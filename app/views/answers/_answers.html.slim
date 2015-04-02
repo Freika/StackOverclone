@@ -2,7 +2,7 @@
   h4 Answers
   - @question.answers.each do |answer|
     - if answer.persisted?
-      div.answer id=dom_id(answer) class=('best-answer' if answer.is_best?)
+      div.answer id=dom_id(answer) class=('solution' if answer.is_solution?)
         p= nice_datetime(answer.created_at)
         small= answer.user.email
         br
@@ -10,8 +10,8 @@
           => link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
           = link_to 'Delete', question_answer_path(@question, answer), data: { confirm: 'Are you sure?', method: :delete, remote: true }
           p
-            - if answer.is_best?
-          = link_to 'Best answer', question_answer_path(@question, answer, 'answer[is_best]': answer.is_best? ? false : true), data: { remote: true, method: :patch }
+            - if answer.is_solution?
+          = link_to 'Mark as solution', question_answer_path(@question, answer, 'answer[is_solution]': answer.is_solution? ? false : true), data: { remote: true, method: :patch }
         p= answer.body
 
         = simple_form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" }, class: 'edit-answer' do |f|

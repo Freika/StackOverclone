@@ -114,10 +114,10 @@ feature 'Interacting with answers' do
     visit question_path(question)
 
     within first('.answer') do
-      click_on 'Best'
+      click_on 'Mark as solution'
     end
 
-    expect(page).to have_selector('.best-answer')
+    expect(page).to have_selector('.solution')
 
   end
 end
