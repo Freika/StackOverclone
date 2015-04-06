@@ -118,6 +118,7 @@ feature 'Interacting with answers' do
     end
 
     expect(page).to have_selector('.solution')
+    expect(page).to have_content 'Marked as solution'
 
   end
 end

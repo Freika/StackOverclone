@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   resources :questions do
     resources :answers, except: :index do
-      get 'mark_as_solution', on: :member
+      patch :mark_as_solution, on: :member
     end
   end
 end

@@ -100,7 +100,19 @@ describe AnswersController do
         expect(response).to redirect_to question
       end
     end
+  end
 
+  describe 'GET #mark_as_solution' do
+    sign_in_user
+
+    let(:solution_question) { create(:question, user: @user) }
+    let(:solution_answer) { create(:answer, question: solution_question) }
+
+    it 'updates is_solution attribute' do
+      patch :mark_as_solution, id: solution_answer, question_id: solution_question, format: :js
+
+      expect(Answer.find(solution_answer.id).is_solution).to eq true
+    end
   end
 
 end
