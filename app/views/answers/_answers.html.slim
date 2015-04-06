@@ -9,7 +9,12 @@
         - if user_signed_in? && current_user.id == answer.user_id
           => link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
           = link_to 'Delete', question_answer_path(@question, answer), data: { confirm: 'Are you sure?', method: :delete, remote: true }
-          p= link_to 'Mark as solution', question_answer_path(@question, answer, 'answer[is_solution]': answer.is_solution? ? false : true), data: { remote: true, method: :patch }
+          - unless answer.is_solution?
+            p= link_to 'Mark as solution', mark_as_solution_question_answer_path(@question, answer), data: { remote: true }
+
+        - if answer.is_solution?
+          strong= 'Marked as solution'
+
         p= answer.body
 
         = simple_form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" }, class: 'edit-answer' do |f|

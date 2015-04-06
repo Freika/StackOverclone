@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :set_question
-  before_action :set_answer, only: :destroy
+  before_action :set_answer, only: [:destroy, :update, :mark_as_solution]
 
   def create
     @answer = @question.answers.build(answer_params)
@@ -10,20 +10,23 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    @answer = Answer.find(params[:id])
     if current_user.id == @answer.user_id
       @answer.destroy
     end
   end
 
   def update
-    @answer = Answer.find(params[:id])
     @question = @answer.question
     if current_user.id == @answer.user_id
       @answer.update(answer_params)
     else
       redirect_to @question, notice: 'Access denied'
     end
+  end
+
+  def mark_as_solution
+    @question = @answer.question
+    @answer.mark_as_solution if @question.user_id == current_user.id
   end
 
   private
