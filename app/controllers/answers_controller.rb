@@ -10,9 +10,7 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    if current_user.id == @answer.user_id
-      @answer.destroy
-    end
+    @answer.destroy if current_user.id == @answer.user_id
   end
 
   def update

@@ -3,6 +3,8 @@ class Answer < ActiveRecord::Base
   belongs_to :question
   belongs_to :user
 
+  scope :order_by_solution, -> { order(is_solution: :desc) }
+
   def mark_as_solution
     self.question.answers.update_all(is_solution: false)
     self.update(is_solution: true)
