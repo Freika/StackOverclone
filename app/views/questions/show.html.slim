@@ -6,7 +6,7 @@ h2= @question.title
 h4= "Author: #{@question.user.email}"
 p= @question.body
 
-= render 'answers/answers'
+.answers = render @question.answers.order_by_solution
 
 - if current_user
   = render 'answers/form'

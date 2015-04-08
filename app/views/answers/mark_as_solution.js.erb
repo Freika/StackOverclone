@@ -1,13 +1,1 @@
-<% if @answer.errors.any? %>
-  <% @answer.errors.full_messages.each do |message| %>
-    $('.answer-errors').html('<%= j message %>');
-  <% end %>
-<% else %>
-  $('.answers').html("<%= j render 'answers' %>");
-  $('.edit-answer-link').click(function (e) {
-    e.preventDefault();
-    $(this).hide();
-    answer_id = $(this).data('answerId');
-    $('form#edit-answer-' + answer_id).show();
-  });
-<% end %>
+$('.answers').html("<%= j render @question.answers.order_by_solution %>");
