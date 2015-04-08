@@ -9,20 +9,22 @@ describe Answer do
   it { should validate_presence_of :body }
   it { should belong_to(:question) }
 
-  it '#mark_as_solution updates is_solution attribute' do
-    first_answer.mark_as_solution
-    expect(Answer.find(first_answer.id).is_solution).to eq true
-  end
+  describe '#mark_as_solution' do
+    it 'updates is_solution attribute' do
+      first_answer.mark_as_solution
+      expect(first_answer.is_solution).to be true
+    end
 
-  it '#mark_as_solution update others answers is_solution to be false' do
-    first_answer.mark_as_solution
-    expect(Answer.find(first_answer.id).is_solution).to eq true
+    it 'updates others answers is_solution to be false' do
+      first_answer.update!(is_solution: true)
+      third_answer.mark_as_solution
 
-    third_answer.mark_as_solution
+      first_answer.reload
+      second_answer.reload
 
-    expect(Answer.find(third_answer.id).is_solution).to eq true
-    expect(Answer.find(first_answer.id).is_solution).to eq false
-    expect(Answer.find(second_answer.id).is_solution).to eq false
-
+      expect(third_answer.is_solution).to be true
+      expect(first_answer.is_solution).to be false
+      expect(second_answer.is_solution).to be false
+    end
   end
 end

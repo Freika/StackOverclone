@@ -110,8 +110,8 @@ describe AnswersController do
 
     it 'updates is_solution attribute' do
       patch :mark_as_solution, id: solution_answer, question_id: solution_question, format: :js
-
-      expect(Answer.find(solution_answer.id).is_solution).to eq true
+      solution_answer.reload
+      expect(solution_answer.is_solution).to be true
     end
   end
 
