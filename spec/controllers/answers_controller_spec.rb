@@ -44,19 +44,74 @@ describe AnswersController do
     context 'answer author' do
       it 'correctly deletes answer' do
         answer.update!(user: @user)
-        expect { delete :destroy, id: answer, question_id: question }.to change(Answer, :count).by(-1)
+        expect { delete :destroy, id: answer, question_id: question, format: :js }.to change(Answer, :count).by(-1)
       end
     end
 
     context 'other user' do
       it 'does not change answers count' do
-        expect { delete :destroy, id: another_answer, question_id: question }.to_not change(Answer, :count)
+        expect { delete :destroy, id: another_answer, question_id: question, format: :js }.to_not change(Answer, :count)
       end
 
-      it 'redirects to question' do
-        delete :destroy, id: another_answer, question_id: question
+      it 'renders destroy template' do
+        delete :destroy, id: another_answer, question_id: question, format: :js
+        expect(response).to render_template :destroy
+      end
+    end
+  end
+
+  describe 'PATCH #update' do
+
+    context 'when tries to update own answer' do
+      sign_in_user
+
+      it 'assigns requested answer record to @answer' do
+        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+        expect(assigns(:answer)).to eq answer
+      end
+
+      it 'updates @answer attributes' do
+        answer.update!(user: @user)
+        patch :update, id: answer, question_id: question, answer: { body: 'Shiny body' }, format: :js
+        answer.reload
+        expect(answer.body).to eq 'Shiny body'
+      end
+
+      it 'render updated answer' do
+        answer.update!(user: @user)
+        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+        expect(response).to render_template :update
+      end
+
+      it 'assigns the question' do
+        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+        expect(assigns(:question)).to eq question
+      end
+    end
+
+    context "when tries to update other's user answer" do
+      sign_in_user
+
+      let(:another_user) { create(:user) }
+      let(:another_answer) { create(:answer, question: question, user_id: another_user) }
+
+      it 'redirects to root' do
+        patch :update, id: another_answer, question_id: question, answer: attributes_for(:answer), format: :js
         expect(response).to redirect_to question
       end
+    end
+  end
+
+  describe 'GET #mark_as_solution' do
+    sign_in_user
+
+    let(:solution_question) { create(:question, user: @user) }
+    let(:solution_answer) { create(:answer, question: solution_question) }
+
+    it 'updates is_solution attribute' do
+      patch :mark_as_solution, id: solution_answer, question_id: solution_question, format: :js
+      solution_answer.reload
+      expect(solution_answer.is_solution).to be true
     end
   end
 

@@ -1,2 +1,8 @@
-$('.answers').html("<%= j render 'answers' %>");
-$('#answer_body').val('');
+<% if @answer.errors.any? %>
+  <% @answer.errors.full_messages.each do |message| %>
+    $('.answer-errors').replaceWith('<%= j message %>');
+  <% end %>
+<% else %>
+  $('.answers').append("<%= j render @answer %>");
+  $('#answer_body').val('');
+<% end %>

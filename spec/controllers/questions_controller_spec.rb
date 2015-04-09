@@ -46,14 +46,26 @@ describe QuestionsController do
   describe 'GET #edit' do
     sign_in_user
 
-    before { get :edit, id: question }
+    context 'question author' do
+      before { get :edit, id: question }
 
-    it 'assigns requested question to @question' do
-      expect(assigns(:question)).to eq question
+      it 'assigns requested question to @question' do
+        expect(assigns(:question)).to eq question
+      end
+
+      it 'renders edit template' do
+        expect(response).to render_template :edit, id: question
+      end
     end
 
-    it 'renders edit template' do
-      expect(response).to render_template :edit, id: question
+    context 'another user' do
+      let(:another_user) { create(:user) }
+      let(:another_question) { create(:question, user: another_user) }
+      before { get :edit, id: another_question }
+
+      it 'redirect to root' do
+        expect(response).to redirect_to root_path
+      end
     end
   end
 
@@ -84,9 +96,9 @@ describe QuestionsController do
   end
 
   describe 'PATCH #update' do
-    sign_in_user
-
     context 'valid attributes' do
+      sign_in_user
+
       it 'assigns requested question record to @question' do
         patch :update, id: question, question: attributes_for(:question)
         expect(assigns(:question)).to eq question
@@ -106,6 +118,7 @@ describe QuestionsController do
     end
 
     context 'invalid attributes' do
+      sign_in_user
       before do
         patch :update, id: question, question: { title: 'Brand new title', body: nil }
       end
@@ -119,6 +132,20 @@ describe QuestionsController do
       it 'render edit template again' do
         expect(response).to render_template :edit
       end
+
+      context 'another user' do
+        let(:another_user) { create(:user) }
+        let(:another_question) { create(:question, user: another_user) }
+        before { patch :update, id: another_question, question: attributes_for(:question, title: 'test') }
+
+        it 'redirect to root' do
+          expect(response).to render_template :edit
+        end
+
+        it "doesn't change question" do
+          expect(Question.find(another_question.id)).to eq another_question
+        end
+      end
     end
   end
 
@@ -130,11 +157,11 @@ describe QuestionsController do
     context 'question author' do
 
       it 'deletes question' do
-        expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
+        expect { delete :destroy, id: question, format: :js }.to change(Question, :count).by(-1)
       end
 
       it 'redirect to index template' do
-        delete :destroy, id: question
+        delete :destroy, id: question, format: :js
         expect(response).to redirect_to questions_path
       end
     end

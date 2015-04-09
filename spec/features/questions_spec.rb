@@ -3,8 +3,9 @@ require 'rails_helper'
 feature 'Interacting with questions' do
 
   given(:user) { create(:user) }
+  given(:question) { create(:question, user: user) }
   given(:another_user) { create(:user) }
-  given(:question) { create(:question, user: another_user) }
+  given(:another_question) { create(:question, user: another_user) }
 
   scenario 'Authenticated user creates question' do
     sign_in_with(user.email, user.password)
@@ -36,15 +37,41 @@ feature 'Interacting with questions' do
 
   scenario "Question's author can delete his question" do
     sign_in_with(another_user.email, another_user.password)
-    visit question_path(question)
+    visit question_path(another_question)
 
     expect(page).to have_content 'Delete question'
   end
 
   scenario "User cannot delete questions he don't authored" do
     sign_in_with(user.email, user.password)
-    visit question_path(question)
+    visit question_path(another_question)
 
     expect(page).to_not have_content 'Delete question'
+  end
+
+  scenario "Question's author can edit his question" do
+    sign_in_with(user.email, user.password)
+    visit question_path(question)
+
+    expect(page).to have_link 'Edit question'
+
+    click_on 'Edit question'
+    fill_in 'Title', with: 'Updated question'
+    click_on 'Update Question'
+
+    within '.alert' do
+      expect(page).to have_content 'Question was successfully updated'
+    end
+
+    within 'h2' do
+      expect(page).to have_content 'Updated question'
+    end
+  end
+
+  scenario "User can't edit questio authored by other user" do
+    sign_in_with(user.email, user.password)
+    visit question_path(another_question)
+
+    expect(page).to_not have_link 'Edit question'
   end
 end
