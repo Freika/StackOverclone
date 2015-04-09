@@ -1,6 +1,6 @@
 <% if @answer.errors.any? %>
   <% @answer.errors.full_messages.each do |message| %>
-    $('.answer-errors').html('<%= j message %>');
+    $('.answer-errors').replaceWith('<%= j message %>');
   <% end %>
 <% else %>
   $('.answers').append("<%= j render @answer %>");
