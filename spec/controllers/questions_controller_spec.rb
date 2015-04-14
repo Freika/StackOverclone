@@ -34,6 +34,11 @@ describe QuestionsController do
 
     before { get :new }
 
+
+    it 'builds new attachment for question' do
+      expect(assigns(:question).attachments.first).to be_a_new(Attachment)
+    end
+
     it 'assigns new Question object to @question' do
       expect(assigns(:question)).to be_a_new Question
     end

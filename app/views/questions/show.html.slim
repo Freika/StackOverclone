@@ -1,10 +1,14 @@
-h2= @question.title
+h2 = @question.title
 - if current_user && @question.user_id == current_user.id
-  small=> link_to 'Edit question', edit_question_path(@question)
-  small= link_to 'Delete question', @question, data: { method: :delete, confirm: 'Are you sure?' }
+  small => link_to 'Edit question', edit_question_path(@question)
+  small = link_to 'Delete question', @question, data: { method: :delete, confirm: 'Are you sure?' }
 
-h4= "Author: #{@question.user.email}"
-p= @question.body
+h4 = "Author: #{@question.user.email}"
+p = @question.body
+p Attachments
+ul
+  - @question.attachments.each do |a|
+    li = a.file.file.filename
 
 .answers = render @question.answers.order_by_solution
 
