@@ -11,6 +11,7 @@ feature 'Add files to question' do
   scenario 'User adds file to question' do
     fill_in 'Title', with: 'Title'
     fill_in 'Body', with: 'Body'
+    click_on 'add attachment'
     attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
     click_on 'Create'
 

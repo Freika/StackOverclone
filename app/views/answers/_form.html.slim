@@ -1,7 +1,9 @@
 = simple_form_for [@question, @answer], remote: true do |f|
   .answer-errors
   = f.input :body, label: 'Your answer'
-  = f.simple_fields_for :attachments do |a|
-    = a.input :file
+
+  = f.simple_fields_for :attachments do |attachment|
+    .links
+      = link_to_add_association 'add attachment', f, :attachments
 
   = f.button :submit, 'Add answer'

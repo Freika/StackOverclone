@@ -3,6 +3,7 @@
   = f.input :body
 
   = f.simple_fields_for :attachments do |a|
-    = a.input :file
+    .links
+      = link_to_add_association 'add attachment', f, :attachments
 
   = f.button :submit
