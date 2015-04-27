@@ -20,6 +20,9 @@
 
     = simple_form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" }, class: 'edit-answer' do |f|
       = f.input :body, label: 'Edit your answer'
+      = f.simple_fields_for :attachments do |attachment|
+        .links
+          = link_to_add_association 'add attachment', f, :attachments, partial: 'shared/attachment_fields'
 
       = f.button :submit
 

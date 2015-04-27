@@ -4,7 +4,7 @@ class Answer < ActiveRecord::Base
   belongs_to :user
   has_many :attachments, as: :attachable
 
-  accepts_nested_attributes_for :attachments
+  accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true
 
   scope :order_by_solution, -> { order(is_solution: :desc) }
 
