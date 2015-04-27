@@ -2,4 +2,7 @@
   = f.input :title
   = f.input :body
 
+  = f.simple_fields_for :attachments do |a|
+  = link_to_add_association 'add attachment', f, :attachments, partial: 'shared/attachments_fields'
+
   = f.button :submit

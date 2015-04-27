@@ -11,6 +11,9 @@ gem 'jbuilder', '~> 2.0'
 gem 'slim-rails'
 gem 'simple_form'
 gem 'bootstrap-sass'
+gem 'carrierwave'
+gem 'remotipart'
+gem 'cocoon'
 
 gem 'devise'
 
