@@ -1,4 +1,5 @@
 = simple_nested_form_for [@question, @answer], remote: true do |f|
+  .answer-errors
   = f.input :body, label: 'Your answer'
 
   .form-group
