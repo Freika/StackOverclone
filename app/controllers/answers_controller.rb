@@ -6,7 +6,7 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.build(answer_params)
     @answer.user = current_user
-    @answer.save
+    @answer.save!
   end
 
   def destroy
@@ -30,7 +30,7 @@ class AnswersController < ApplicationController
   private
 
   def answer_params
-    params.require(:answer).permit(:body, :question_id, :is_solution, attachments_attributes: [:file])
+    params.require(:answer).permit(:body, :question_id, :is_solution, attachments_attributes: [:file, :id, :_destroy])
   end
 
   def set_answer

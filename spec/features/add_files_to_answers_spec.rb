@@ -11,11 +11,15 @@ feature 'Add files to answer' do
 
   scenario 'User adds file to answer', js: true do
     fill_in 'Your answer', with: 'Your answer'
-    attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
+    attach_file 'File', "#{Rails.root}/spec/support/files/stark.png"
+    click_on 'Add attachment'
+    within '.fields:not(:first-child)' do
+      attach_file 'File', "#{Rails.root}/spec/support/files/stark.png"
+    end
     click_on 'Add answer'
 
     within '.answers' do
-      expect(page).to have_link 'rails_helper.rb', href: '/uploads/attachment/file/1/rails_helper.rb'
+      expect(page).to have_link 'stark.png', href: '/uploads/attachment/file/1/stark.png'
     end
   end
 end
