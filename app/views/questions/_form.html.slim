@@ -1,8 +1,8 @@
-= simple_form_for question do |f|
+= simple_nested_form_for question do |f|
   = f.input :title
   = f.input :body
 
-  = f.simple_fields_for :attachments do |a|
-    = a.input :file
+  .form-group
+    = render 'shared/attachment_fields', f: f
 
   = f.button :submit

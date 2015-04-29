@@ -13,6 +13,7 @@ gem 'simple_form'
 gem 'bootstrap-sass'
 gem 'carrierwave'
 gem 'remotipart'
+gem "nested_form"
 
 gem 'devise'
 
