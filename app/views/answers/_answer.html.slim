@@ -12,7 +12,11 @@
     - if answer.is_solution?
       strong= 'Marked as solution'
 
-    p= answer.body
+    p = answer.body
+    p Attachments
+    ul
+      - answer.attachments.each do |a|
+        li = link_to a.file.identifier, a.file.url
 
     = simple_form_for [@question, answer], remote: true, html: { id: "edit-answer-#{answer.id}" }, class: 'edit-answer' do |f|
       = f.input :body, label: 'Edit your answer'
