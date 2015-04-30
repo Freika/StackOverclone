@@ -3,6 +3,10 @@ class Answer < ActiveRecord::Base
   belongs_to :question
   belongs_to :user
 
+  has_many :attachments, as: :attachable
+
+  accepts_nested_attributes_for :attachments, allow_destroy: true
+
   scope :order_by_solution, -> { order(is_solution: :desc) }
 
   def mark_as_solution

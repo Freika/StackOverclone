@@ -1,5 +1,9 @@
-= simple_form_for [@question, @answer], remote: true do |f|
+= simple_nested_form_for [@question, @answer], remote: true do |f|
   .answer-errors
   = f.input :body, label: 'Your answer'
+
+  .form-group
+    = render 'shared/attachment_fields', f: f
+
 
   = f.button :submit, 'Add answer'
